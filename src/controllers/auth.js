@@ -1,6 +1,7 @@
 import User from "../model/user";
-import { signupSchema } from "../schemas/auth";
+import { signupSchema, signinSchema } from "../schemas/auth";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 export const signup = async (req, res) => {
   try {
     //validate dau vao
@@ -42,3 +43,47 @@ export const signup = async (req, res) => {
 // B3: Tạo user mới
 // B4: Tạo token mới chứa id của user
 // B5: Trả về client
+
+export const signin = async (req, res) => {
+  try {
+    const { error } = signinSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+
+      return res.status(400).json({
+        messages: errors,
+      });
+    }
+
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(400).json({
+        messages: "Email không tồn tại",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        messages: "Sai mật khẩu",
+      });
+    }
+    const token = jwt.sign({ id: user._id }, "banThayDat", { expiresIn: "1d" });
+    user.password = undefined;
+    return res.status(200).json({
+      message: "Đăng nhập thành công",
+      accessToken: token,
+      user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: "ncc",
+    });
+  }
+};
+// Đăng nhập
+// B1: Kiểm tra thông tin req.body có hợp lệ hay không
+// B2: Kiểm tra email đã tồn tại hay chưa?
+// B2.1: So sánh password client với password trong db
+// B3: Tạo token mới chứa id của user
+// B4: Trả về client

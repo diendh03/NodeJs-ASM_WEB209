@@ -64,8 +64,8 @@ export const create = async (req, res) => {
 };
 export const remove = async (req, res) => {
   try {
-    await axios.delete(`http://localhost:3001/products/${req.params.id}`);
-    
+    const product = await Product.findByIdAndDelete(req.params.id);
+
     return res.status(200).json({
       message: "Sản phẩm đã được xóa thành công",
     });

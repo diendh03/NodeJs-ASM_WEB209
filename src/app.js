@@ -9,9 +9,9 @@ app.use(express.json());
 
 // router
 app.use("/api", productRouter);
-app.use("api", authRouter);
+app.use("/api", authRouter);
 // server
-mongoose.connect("mongodb://localhost:27017/we17307");
+mongoose.connect("mongodb://127.0.0.1:27017/we17307");
 export const viteNodeApp = app;
 
 // npm i vite vite-plugin-node -D
