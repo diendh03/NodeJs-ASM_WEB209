@@ -8,7 +8,7 @@ export const getAll = async (req, res) => {
     // Nếu mảng không có sản phẩm nào thì trả về 404
     if (categories.length === 0) {
       res.status(404).json({
-        message: "Không có sản phẩm nào",
+        message: "Không có danh mục nào nào",
       });
     }
     // Nếu có sản phẩm thì trả về 200 và mảng sản phẩm
@@ -22,15 +22,10 @@ export const getAll = async (req, res) => {
 };
 export const get = async (req, res) => {
   try {
-    console.log(1);
-    // const { data: product } = await axios.get(
-    //   `http://localhost:3001/products/${req.params.id}`
-    // );
     const category = await Category.findById(req.params.id);
-
     if (!category) {
       return res.status(404).json({
-        message: "Không tìm thấy sản phẩm",
+        message: "Không tìm thấy danh mục",
       });
     }
     const products = await Product.find({ categoryId: req.params.id });
@@ -46,18 +41,14 @@ export const get = async (req, res) => {
 };
 export const create = async (req, res) => {
   try {
-    // const { data: product } = await axios.post(
-    //   "http://localhost:3001/products",
-    //   req.body
-    // );
     const category = await Category.create(req.body);
     if (!category) {
       return res.status(400).json({
-        message: "Không thể tạo sản phẩm",
+        message: "Không thể tạo danh mục",
       });
     }
     return res.status(201).json({
-      message: "Product created",
+      message: "Danh mục đã được tạo",
       data: category,
     });
   } catch (error) {
@@ -71,7 +62,7 @@ export const remove = async (req, res) => {
     const category = await Category.findByIdAndDelete(req.params.id);
 
     return res.status(200).json({
-      message: "Sản phẩm đã được xóa thành công",
+      message: "Danh mục đã được xóa thành công",
     });
   } catch (error) {
     return res.status(500).json({
@@ -82,20 +73,16 @@ export const remove = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    // const { data: product } = await axios.patch(
-    //   `http://localhost:3001/products/${req.params.id}`,
-    //   req.body
-    // );
     const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!category) {
       return res.status(404).json({
-        message: "Không tìm thấy sản phẩm",
+        message: "Không tìm thấy danh mục",
       });
     }
     return res.status(200).json({
-      message: "Sản phẩm đã được cập nhật thành công",
+      message: "Danh mục đã được cập nhật thành công",
       data: category,
     });
   } catch (error) {

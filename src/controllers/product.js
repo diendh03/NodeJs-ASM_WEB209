@@ -21,9 +21,6 @@ export const getAll = async (req, res) => {
 };
 export const get = async (req, res) => {
   try {
-    // const { data: product } = await axios.get(
-    //   `http://localhost:3001/products/${req.params.id}`
-    // );
     const product = await Product.findById(req.params.id).populate(
       "categoryId"
     );
