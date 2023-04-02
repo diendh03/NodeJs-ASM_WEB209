@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../model/user";
+import dotenv from "dotenv";
+dotenv.config();
 export const checkPermission = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
@@ -8,7 +10,7 @@ export const checkPermission = (req, res, next) => {
       message: "Ban chua dang nhap",
     });
   }
-  jwt.verify(token, "banThayDat", async (err, payload) => {
+  jwt.verify(token, process.env.SECRET_KEY, async (err, payload) => {
     // console.log(payload);
     if (err && err.name === "JsonWebTokenError") {
       return res.status(400).json({

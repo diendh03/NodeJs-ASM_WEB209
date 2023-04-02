@@ -1,5 +1,5 @@
-import axios from "axios";
 import Product from "../model/product";
+import { productSchema } from "../schemas/product";
 export const getAll = async (req, res) => {
   try {
     // gửi request từ server nodes -> json-server
@@ -44,10 +44,12 @@ export const get = async (req, res) => {
 };
 export const create = async (req, res) => {
   try {
-    // const { data: product } = await axios.post(
-    //   "http://localhost:3001/products",
-    //   req.body
-    // );
+    const { error } = productSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        message: error.details[0].message,
+      });
+    }
     const product = await Product.create(req.body);
     if (!product) {
       return res.status(400).json({
@@ -80,10 +82,6 @@ export const remove = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    // const { data: product } = await axios.patch(
-    //   `http://localhost:3001/products/${req.params.id}`,
-    //   req.body
-    // );
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });

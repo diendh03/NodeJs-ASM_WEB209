@@ -2,6 +2,8 @@ import User from "../model/user";
 import { signupSchema, signinSchema } from "../schemas/auth";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 export const signup = async (req, res) => {
   try {
     //validate dau vao
@@ -68,7 +70,9 @@ export const signin = async (req, res) => {
         messages: "Sai mật khẩu",
       });
     }
-    const token = jwt.sign({ id: user._id }, "banThayDat", { expiresIn: "1d" });
+    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "1d",
+    });
     user.password = undefined;
     return res.status(200).json({
       message: "Đăng nhập thành công",
