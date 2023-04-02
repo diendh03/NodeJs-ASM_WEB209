@@ -9,17 +9,19 @@ export const checkPermission = (req, res, next) => {
     });
   }
   jwt.verify(token, "banThayDat", async (err, payload) => {
-    if (err === "JsonWebTokenError") {
+    // console.log(payload);
+    if (err && err.name === "JsonWebTokenError") {
       return res.status(400).json({
         message: "Token không hợp lệ",
       });
     }
-    if (err === "TokenExpiredError") {
+    if (err && err.name === "TokenExpiredError") {
       return res.status(400).json({
         message: "Token đã hết hạn",
       });
     }
-    const user = User.findById(payload.id);
+    const user = await User.findById(payload.id);
+    // console.log(user);
     if (user.role !== "admin") {
       return res.status(403).json({
         message: "Ban khong du quyen de thuc hien hanh dong nay",
