@@ -1,9 +1,23 @@
+import Category from "../model/category";
 import Product from "../model/product";
 import { productSchema } from "../schemas/product";
 export const getAll = async (req, res) => {
+  const {
+    _limit = 10,
+    _page = 1,
+    _sort = "created_At",
+    _order = "asc",
+  } = req.query;
+  const options = {
+    page: _page,
+    limit: _limit,
+    sort: {
+      [_sort]: _order == "desc" ? -1 : 1,
+    },
+  };
   try {
     // gửi request từ server nodes -> json-server
-    const products = await Product.find();
+    const products = await Product.paginate({}, options);
     // Nếu mảng không có sản phẩm nào thì trả về 404
     if (products.length === 0) {
       res.status(404).json({
@@ -47,12 +61,18 @@ export const create = async (req, res) => {
         message: error.details[0].message,
       });
     }
+
     const product = await Product.create(req.body);
     if (!product) {
       return res.status(400).json({
         message: "Không thể tạo sản phẩm",
       });
     }
+    await Category.findByIdAndUpdate(product.categoryId, {
+      $addToSet: {
+        products: product._id,
+      },
+    });
     return res.status(201).json({
       message: "Product created",
       data: product,

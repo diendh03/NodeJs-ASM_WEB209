@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 const productSchema = new mongoose.Schema(
   {
-    name: String,
+    productName: String,
     price: Number,
+    originalPrice: Number,
+    description: String,
+    image: String,
     categoryId: {
       type: mongoose.Types.ObjectId,
       ref: "Category",
@@ -10,4 +14,5 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false }
 );
-export default mongoose.model("products", productSchema);
+productSchema.plugin(mongoosePaginate);
+export default mongoose.model("Product", productSchema);

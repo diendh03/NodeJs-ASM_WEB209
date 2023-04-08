@@ -8,7 +8,7 @@ export const getAll = async (req, res) => {
     // Nếu mảng không có sản phẩm nào thì trả về 404
     if (categories.length === 0) {
       res.status(404).json({
-        message: "Không có danh mục nào nào",
+        message: "Không có danh mục nào ",
       });
     }
     // Nếu có sản phẩm thì trả về 200 và mảng sản phẩm
@@ -22,7 +22,9 @@ export const getAll = async (req, res) => {
 };
 export const get = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.id).populate(
+      "products"
+    );
     if (!category) {
       return res.status(404).json({
         message: "Không tìm thấy danh mục",
@@ -41,6 +43,7 @@ export const get = async (req, res) => {
 };
 export const create = async (req, res) => {
   try {
+    console.log(1);
     const category = await Category.create(req.body);
     if (!category) {
       return res.status(400).json({

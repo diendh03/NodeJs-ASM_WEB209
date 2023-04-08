@@ -70,7 +70,7 @@ export const signin = async (req, res) => {
         messages: "Sai mật khẩu",
       });
     }
-    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+    const token = jwt.sign({ id: user._id }, "diendeptrai", {
       expiresIn: "1d",
     });
     user.password = undefined;

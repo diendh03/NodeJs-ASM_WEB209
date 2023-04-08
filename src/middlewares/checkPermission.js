@@ -10,7 +10,7 @@ export const checkPermission = (req, res, next) => {
       message: "Ban chua dang nhap",
     });
   }
-  jwt.verify(token, process.env.SECRET_KEY, async (err, payload) => {
+  jwt.verify(token, "diendeptrai", async (err, payload) => {
     // console.log(payload);
     if (err && err.name === "JsonWebTokenError") {
       return res.status(400).json({
