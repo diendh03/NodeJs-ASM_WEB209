@@ -7,6 +7,7 @@ export const getAll = async (req, res) => {
     _page = 1,
     _sort = "created_At",
     _order = "asc",
+    _keyword,
   } = req.query;
   const options = {
     page: _page,
@@ -16,6 +17,11 @@ export const getAll = async (req, res) => {
     },
   };
   try {
+    const searchData = (products) => {
+      return products?.docs?.filter((item) =>
+        item.productName.includes(_keyword)
+      );
+    };
     // gửi request từ server nodes -> json-server
     const products = await Product.paginate({}, options);
     // Nếu mảng không có sản phẩm nào thì trả về 404
@@ -24,8 +30,15 @@ export const getAll = async (req, res) => {
         message: "Không có sản phẩm nào",
       });
     }
-    // Nếu có sản phẩm thì trả về 200 và mảng sản phẩm
+    if (_keyword) {
+      const searchDataProduct = await searchData(products);
+      const productsResponse = await { ...products, docs: searchDataProduct };
+      return res.status(200).json(productsResponse);
+    }
+
     return res.status(200).json(products);
+
+    // Nếu có sản phẩm thì trả về 200 và mảng sản phẩm
   } catch (error) {
     // Nếu có lỗi thì trả về 500 và lỗi
     return res.status(500).json({
