@@ -4,6 +4,7 @@ import authRouter from "./routes/auth";
 import categoryRouter from "./routes/category";
 import mongoose from "mongoose";
 import cors from "cors";
+
 const app = express();
 
 // middleware
