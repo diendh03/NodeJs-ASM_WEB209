@@ -1,7 +1,7 @@
 import axios from "axios";
 import Category from "../model/category";
 import Product from "../model/product";
-export const getAll = async (req, res) => {
+export const getAllCate = async (req, res) => {
   try {
     // gửi request từ server nodes -> json-server
     const categories = await Category.find();
@@ -20,7 +20,7 @@ export const getAll = async (req, res) => {
     });
   }
 };
-export const get = async (req, res) => {
+export const getCateById = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id).populate(
       "products"
@@ -41,7 +41,7 @@ export const get = async (req, res) => {
     });
   }
 };
-export const create = async (req, res) => {
+export const createCate = async (req, res) => {
   try {
     console.log(1);
     const category = await Category.create(req.body);
@@ -60,7 +60,7 @@ export const create = async (req, res) => {
     });
   }
 };
-export const remove = async (req, res) => {
+export const removeCate = async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
 
@@ -74,7 +74,7 @@ export const remove = async (req, res) => {
   }
 };
 
-export const update = async (req, res) => {
+export const updateCate = async (req, res) => {
   try {
     const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

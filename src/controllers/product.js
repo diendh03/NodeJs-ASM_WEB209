@@ -1,7 +1,7 @@
 import Category from "../model/category";
 import Product from "../model/product";
 import { productSchema } from "../schemas/product";
-export const getAll = async (req, res) => {
+export const getAllProduct = async (req, res) => {
   const {
     _limit = 10,
     _page = 1,
@@ -22,7 +22,7 @@ export const getAll = async (req, res) => {
         item.productName.includes(_keyword)
       );
     };
-    // gửi request từ server nodes -> json-server
+
     const products = await Product.paginate({}, options);
     // Nếu mảng không có sản phẩm nào thì trả về 404
     if (products.length === 0) {
@@ -46,7 +46,7 @@ export const getAll = async (req, res) => {
     });
   }
 };
-export const get = async (req, res) => {
+export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate(
       "categoryId"
@@ -66,7 +66,7 @@ export const get = async (req, res) => {
     });
   }
 };
-export const create = async (req, res) => {
+export const createProduct = async (req, res) => {
   try {
     const { error } = productSchema.validate(req.body);
     if (error) {
@@ -96,7 +96,7 @@ export const create = async (req, res) => {
     });
   }
 };
-export const remove = async (req, res) => {
+export const removeProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
 
@@ -110,7 +110,7 @@ export const remove = async (req, res) => {
   }
 };
 
-export const update = async (req, res) => {
+export const updateProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
