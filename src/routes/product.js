@@ -23,10 +23,16 @@ const storage = new CloudinaryStorage({
 const uploadCloud = multer({ storage });
 router.get("/products", getAllProduct);
 router.get("/products/:id", getProductById);
-router.post("/products/add", uploadCloud.array("image", 10), createProduct);
-router.delete("/products/:id", removeProduct);
+router.post(
+  "/products/add",
+  checkPermission,
+  uploadCloud.array("image", 10),
+  createProduct
+);
+router.delete("/products/:id", checkPermission, removeProduct);
 router.patch(
   "/products/update/:id",
+  checkPermission,
   uploadCloud.array("image", 10),
   updateProduct
 );

@@ -20,6 +20,8 @@ export const signupSchema = Joi.object({
     "any.required": "Trường xác nhận mật khẩu là bắt buộc",
     "any.only": 'Trường "xác nhận mật khẩu" không khớp',
   }),
+  num_phone: Joi.string().required(),
+  address: Joi.string().required(),
 });
 export const signinSchema = Joi.object({
   email: Joi.string().email().required().messages({

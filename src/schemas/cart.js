@@ -1,6 +1,5 @@
 import Joi from "joi";
 export const cartSchema = Joi.object({
-  cart_id: Joi.string(),
   user_id: Joi.string(),
   items: Joi.array().items(
     Joi.object({
@@ -13,4 +12,3 @@ export const cartSchema = Joi.object({
   ),
   total_price: Joi.number(),
 });
-

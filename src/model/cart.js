@@ -1,19 +1,26 @@
 import mongoose from "mongoose";
 
+import { mongoosePaginate } from "mongoose-paginate-v2";
+
 const cartSchema = new mongoose.Schema(
   {
-    cart_id: { type: String, required: true },
-    customer_id: { type: String, required: true },
+    user_id: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
     items: [
       {
-        product_id: { type: String, required: true },
+        product_id: {
+          type: mongoose.Types.ObjectId,
+          ref: "Product",
+        },
         name: { type: String, required: true },
         price: { type: Number, required: true },
         quantity: { type: Number, required: true },
         subtotal: { type: Number, required: true },
       },
     ],
-    total_price: { type: Number, required: true },
+    total_price: { type: Number },
   },
   { timestamps: true, versionKey: false }
 );
